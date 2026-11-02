@@ -40,3 +40,4 @@ backend/fuzz/corpus/
 backend/fuzz/artifacts/
 backend/dpi/fuzz/corpus/
 backend/dpi/fuzz/artifacts/
+.ndpi/

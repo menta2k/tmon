@@ -60,7 +60,8 @@ jobs:
     name: DPI sidecar (nDPI)
     runs-on: ubuntu-latest
     env:
-      NDPI_PREFIX: ${{ github.workspace }}/backend/dpi/target/ndpi
+      # Outside target/: the Rust cache step restores and prunes target/.
+      NDPI_PREFIX: ${{ github.workspace }}/.ndpi
     steps:
       - uses: actions/checkout@v5
       - name: Build dependencies
@@ -71,8 +72,8 @@ jobs:
       - uses: actions/cache@v4
         id: ndpi
         with:
-          path: backend/dpi/target/ndpi
-          key: ndpi-${{ runner.os }}-${{ env.NDPI_TAG }}-v1
+          path: .ndpi
+          key: ndpi-${{ runner.os }}-${{ env.NDPI_TAG }}-v2
       - name: Build nDPI
         if: steps.ndpi.outputs.cache-hit != 'true'
         run: |
