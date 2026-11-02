@@ -56,7 +56,7 @@ jobs:
       - run: cargo check --workspace --locked
 
   dpi-sidecar:
-    name: DPI sidecar (nDPI ${{ env.NDPI_TAG }})
+    name: DPI sidecar (nDPI)
     runs-on: ubuntu-latest
     env:
       NDPI_PREFIX: ${{ github.workspace }}/backend/dpi/target/ndpi
