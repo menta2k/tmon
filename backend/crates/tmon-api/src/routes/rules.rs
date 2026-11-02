@@ -93,10 +93,9 @@ async fn hits(s: &AppState) -> Result<HashMap<u32, u64>, ApiError> {
         .lock()
         .map_err(|_| ApiError::Internal("hits cache poisoned".into()))?
         .as_ref()
+        && now - at < HITS_CACHE_MS
     {
-        if now - at < HITS_CACHE_MS {
-            return Ok(h.as_ref().clone());
-        }
+        return Ok(h.as_ref().clone());
     }
     let h = s
         .blocking(move |st| rules::hits(&st.conn()?, st.raw_dir(), now - HITS_WINDOW_MS, now + 1))

@@ -107,10 +107,10 @@ impl Auth {
 
     /// True when the request carries a valid session cookie or bearer token.
     pub fn is_authorized(&self, headers: &HeaderMap, now_ms: i64) -> bool {
-        if let (Some(token), Some(bearer)) = (&self.api_token, bearer(headers)) {
-            if constant_eq(token.as_bytes(), bearer.as_bytes()) {
-                return true;
-            }
+        if let (Some(token), Some(bearer)) = (&self.api_token, bearer(headers))
+            && constant_eq(token.as_bytes(), bearer.as_bytes())
+        {
+            return true;
         }
         session_cookie(headers).is_some_and(|id| self.session_valid(&id, now_ms))
     }

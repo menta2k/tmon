@@ -282,7 +282,7 @@ async fn process(
                 let now = now_ms();
                 proc.sweep(now);
                 ticks = ticks.wrapping_add(1);
-                if ticks % TABLE_SWEEP_EVERY == 0 {
+                if ticks.is_multiple_of(TABLE_SWEEP_EVERY) {
                     handle.table.sweep(now);
                 }
             }

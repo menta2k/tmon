@@ -34,13 +34,12 @@ impl Report {
 
 fn remove(f: &RawFile) -> StoreResult<()> {
     std::fs::remove_file(&f.path)?;
-    if let Some(dir) = f.path.parent() {
-        if std::fs::read_dir(dir)
+    if let Some(dir) = f.path.parent()
+        && std::fs::read_dir(dir)
             .map(|mut d| d.next().is_none())
             .unwrap_or(false)
-        {
-            std::fs::remove_dir(dir)?;
-        }
+    {
+        std::fs::remove_dir(dir)?;
     }
     Ok(())
 }

@@ -110,13 +110,13 @@ fn validate(p: &HostPatch) -> Result<HostPatch, ValidationErrors> {
         .friendly_name
         .clone()
         .map(|o| o.map(|s| s.trim().to_string()).filter(|s| !s.is_empty()));
-    if let Some(Some(n)) = &friendly {
-        if n.chars().count() > NAME_MAX {
-            e.add(
-                "friendly_name",
-                format!("must be at most {NAME_MAX} characters"),
-            );
-        }
+    if let Some(Some(n)) = &friendly
+        && n.chars().count() > NAME_MAX
+    {
+        e.add(
+            "friendly_name",
+            format!("must be at most {NAME_MAX} characters"),
+        );
     }
     let mac = match &p.mac {
         Some(Some(m)) if !m.trim().is_empty() => match normalize_mac(m) {

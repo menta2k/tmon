@@ -79,18 +79,17 @@ impl GeoIp {
         ] {
             let current = slot.load().as_ref().and_then(|d| d.mtime);
             let on_disk = mtime(path);
-            if on_disk.is_some() && on_disk != current {
-                if let Some(db) = Db::open(path) {
-                    tracing::info!(path = %path.display(), "GeoIP database reloaded");
-                    slot.store(Some(Arc::new(db)));
-                    changed = true;
-                }
+            if on_disk.is_some()
+                && on_disk != current
+                && let Some(db) = Db::open(path)
+            {
+                tracing::info!(path = %path.display(), "GeoIP database reloaded");
+                slot.store(Some(Arc::new(db)));
+                changed = true;
             }
         }
-        if changed {
-            if let Ok(mut c) = self.cache.lock() {
-                c.clear();
-            }
+        if changed && let Ok(mut c) = self.cache.lock() {
+            c.clear();
         }
         changed
     }

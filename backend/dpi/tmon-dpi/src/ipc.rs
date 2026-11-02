@@ -172,10 +172,10 @@ pub fn run<E: Engine>(t: &mut impl Transport, flows: &mut Flows<E>) -> io::Resul
                 None
             }
         };
-        if let Some(m) = reply {
-            if send(t, &m.encode())?.is_some() {
-                return Ok(End::PeerGone);
-            }
+        if let Some(m) = reply
+            && send(t, &m.encode())?.is_some()
+        {
+            return Ok(End::PeerGone);
         }
     }
 }

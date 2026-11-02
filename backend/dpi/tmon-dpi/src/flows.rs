@@ -120,10 +120,10 @@ impl<E: Engine> Flows<E> {
                 reported: None,
                 last_seen_ms: now,
             };
-            if let Some((old, _)) = self.table.push(key, fresh) {
-                if old != key {
-                    self.counters.evicted_lru += 1;
-                }
+            if let Some((old, _)) = self.table.push(key, fresh)
+                && old != key
+            {
+                self.counters.evicted_lru += 1;
             }
             self.counters.flows_created += 1;
         }

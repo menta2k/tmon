@@ -83,10 +83,10 @@ impl Jobs {
     }
 
     fn set(&self, id: u64, f: impl FnOnce(Job) -> Job) {
-        if let Ok(mut t) = self.table.lock() {
-            if let Some(cur) = t.get(&id).cloned() {
-                t.insert(id, f(cur));
-            }
+        if let Ok(mut t) = self.table.lock()
+            && let Some(cur) = t.get(&id).cloned()
+        {
+            t.insert(id, f(cur));
         }
     }
 
