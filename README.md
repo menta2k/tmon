@@ -36,6 +36,15 @@ Capture names connections that carry a server name. BitTorrent, WireGuard/OpenVP
 
 ## Docker
 
+Prebuilt images are published to GitHub Container Registry on every push to `main` and for each `v*` tag (linux/amd64):
+
+| Image | Contents |
+|---|---|
+| `ghcr.io/menta2k/tmon:latest` | tmon (no nDPI) |
+| `ghcr.io/menta2k/tmon:latest-dpi` | tmon + the `tmon-dpi` application classifier (nDPI, LGPL-3.0; see `/usr/share/doc/tmon-dpi/` in the image) |
+
+Versioned tags follow the same pattern (`1.2.3`, `1.2`, `sha-<commit>`, plus `-dpi` for the nDPI variant). To use one with the compose files, tag it locally, for example `docker pull ghcr.io/menta2k/tmon:latest-dpi && docker tag ghcr.io/menta2k/tmon:latest-dpi tmon:dpi`, or build it yourself:
+
 ```bash
 docker build -f deploy/Dockerfile -t tmon .
 echo -n 'your-password' | docker run --rm -i tmon hash-password > /tmp/h && \
