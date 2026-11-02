@@ -1,0 +1,51 @@
+[package]
+name = "tmon-capture"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[features]
+# Packet builders for tests, benches, fuzz seeds and the fixture generator.
+fixtures = []
+
+[dependencies]
+tmon-core.workspace = true
+tokio.workspace = true
+socket2.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+lru.workspace = true
+etherparse.workspace = true
+tls-parser.workspace = true
+hickory-proto.workspace = true
+ring.workspace = true
+httparse.workspace = true
+
+[dev-dependencies]
+tmon-capture = { path = ".", features = ["fixtures"] }
+tmon-collector.workspace = true
+criterion.workspace = true
+proptest.workspace = true
+hickory-proto.workspace = true
+tokio.workspace = true
+
+[[bench]]
+name = "capture_pipeline"
+harness = false
+
+[[example]]
+name = "gen_capture_fixtures"
+required-features = ["fixtures"]
+
+[[example]]
+name = "gen_fuzz_seeds"
+required-features = ["fixtures"]
+
+[[example]]
+name = "capture_flood"
+required-features = ["fixtures"]
+
+[[example]]
+name = "gen_app_fixtures"
+required-features = ["fixtures"]

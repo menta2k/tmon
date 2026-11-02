@@ -1,0 +1,42 @@
+# Rust
+target/
+debug/
+release/
+*.rs.bk
+*.rlib
+*.prof*
+*.profraw
+*.profdata
+lcov.info
+# Node
+node_modules/
+frontend/dist/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+*.log
+# data
+data/
+*.duckdb
+*.duckdb.wal
+*.parquet
+!backend/tests/fixtures/**
+# env / editors
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+# local Claude Code state (skills under .claude/skills are shared)
+.claude/settings.local.json
+.claude/worktrees/
+*.tmp
+*.swp
+# fuzzing
+backend/fuzz/corpus/
+backend/fuzz/artifacts/
+backend/dpi/fuzz/corpus/
+backend/dpi/fuzz/artifacts/

@@ -1,0 +1,78 @@
+# tmon configuration for the -dpi image (deploy/docker-compose.dpi.yml):
+# packet capture + application classification enabled. Based on tmon.example.toml.
+# Every key can be overridden with TMON_<SECTION>__<KEY>,
+# e.g. TMON_HTTP__PASSWORD_HASH, TMON_ROUTER__PASSWORD. Secrets belong in the environment.
+data_dir = "/var/lib/tmon"
+
+[http]
+listen = "0.0.0.0:8080"
+# argon2 hash from `tmon hash-password`; prefer TMON_HTTP__PASSWORD_HASH.
+password_hash = ""
+# Optional bearer token for /metrics and scripts; prefer TMON_HTTP__API_TOKEN.
+api_token = ""
+session_ttl_hours = 168
+
+[collector]
+netflow_listen = ["0.0.0.0:2055", "0.0.0.0:4739"]
+sflow_listen = ["0.0.0.0:6343"]
+# Only accept exports from these routers (empty = accept all).
+# Docker Desktop: every sender appears as the compose network gateway (docker network inspect
+# deploy_default), not the router. The real sender filter is the Windows firewall rule that only
+# allows UDP 2055/38008 from 192.168.88.1. On a Linux host use ["192.168.88.1"] instead.
+allowed_exporters = ["172.20.0.1"]
+socket_recv_buffer_bytes = 8388608
+queue_capacity = 65536
+
+[storage]
+flush_interval_secs = 5
+memory_limit = "512MB"
+threads = 2
+disk_cap_gb = 20
+
+[retention]
+raw_days = 7
+rollup_1m_days = 30
+rollup_1h_days = 365
+
+[geoip]
+# Populated by `tmon geoip-update` (DB-IP Lite, CC BY 4.0).
+country_db = "/var/lib/tmon/geo/dbip-country-lite.mmdb"
+asn_db = "/var/lib/tmon/geo/dbip-asn-lite.mmdb"
+
+[router]
+# Optional read-only router integration for DHCP host names.
+# kind = "routeros" (MikroTik REST, docs/routeros.md) or "openwrt" (rpcd/ubus, docs/openwrt.md)
+kind = "routeros"
+enabled = false
+url = "https://192.168.88.1"
+username = "tmon-ro"
+password = ""            # use TMON_ROUTER__PASSWORD
+verify_tls = true
+lease_poll_secs = 60
+dns_poll_secs = 30
+
+[capture]
+# Router rules: docs/routeros.md ("Packet capture" + "Reply direction").
+enabled = true
+listen = "0.0.0.0:37008"
+allowed_sources = ["172.20.0.1"]       # see the [collector] note
+socket_recv_buffer_bytes = 4194304
+queue_capacity = 16384                 # datagrams; when full, capture packets are dropped (never flows)
+conn_ttl_secs = 600
+max_connections = 100000
+max_reassembly_bytes_per_conn = 16384
+max_reassembly_bytes_total = 67108864
+max_device_bindings = 200000
+reassembly_timeout_secs = 10
+silent_warning_secs = 300
+
+[dpi]
+# Application classification by the tmon-dpi sidecar (nDPI). Docs: docs/dpi.md.
+enabled = true
+binary = "/usr/local/bin/tmon-dpi"
+max_flows = 50000
+max_packets_per_conn = 32
+idle_timeout_secs = 900
+memory_limit_mb = 192                  # classifier memory budget (RLIMIT_AS = this + 64)
+queue_capacity = 16384
+queue_max_bytes = 16777216

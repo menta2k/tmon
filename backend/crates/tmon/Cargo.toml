@@ -1,0 +1,64 @@
+[package]
+name = "tmon"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+tmon-core.workspace = true
+tmon-collector.workspace = true
+tmon-capture.workspace = true
+tmon-dpi-client.workspace = true
+tmon-enrich.workspace = true
+tmon-store.workspace = true
+tmon-api.workspace = true
+tokio.workspace = true
+figment.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+clap.workspace = true
+argon2.workspace = true
+rand.workspace = true
+reqwest.workspace = true
+flate2.workspace = true
+maxminddb.workspace = true
+time.workspace = true
+arc-swap.workspace = true
+axum.workspace = true
+
+[features]
+embed-ui = ["tmon-api/embed-ui"]
+
+[dev-dependencies]
+wiremock.workspace = true
+tempfile.workspace = true
+reqwest.workspace = true
+serde_json.workspace = true
+argon2.workspace = true
+tmon-collector.workspace = true
+tmon-capture = { workspace = true, features = ["fixtures"] }
+
+[[test]]
+name = "us1_dashboard"
+path = "../../tests/us1_dashboard.rs"
+
+[[test]]
+name = "us2_top"
+path = "../../tests/us2_top.rs"
+
+[[test]]
+name = "us4_router"
+path = "../../tests/us4_router.rs"
+
+[[test]]
+name = "us7_capture"
+path = "../../tests/us7_capture.rs"
+
+[[test]]
+name = "us8_dpi"
+path = "../../tests/us8_dpi.rs"

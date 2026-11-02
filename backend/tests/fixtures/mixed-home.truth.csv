@@ -1,0 +1,19 @@
+category,direction,local_ip,bytes
+DNS,down,192.168.88.10,120000
+DNS,up,192.168.88.10,12000
+Email,down,192.168.88.12,900000
+Email,up,192.168.88.12,90000
+Gaming,down,192.168.88.11,8000000
+Gaming,up,192.168.88.11,800000
+Network Services,down,192.168.88.13,9000
+Network Services,up,192.168.88.13,900
+Other,down,192.168.88.13,2000000
+Other,up,192.168.88.13,200000
+VPN/Tunnels,down,192.168.88.12,4000000
+VPN/Tunnels,up,192.168.88.12,400000
+Web,down,192.168.88.10,70000000
+Web,down,192.168.88.11,30000000
+Web,down,fd00::10,12000000
+Web,up,192.168.88.10,7000000
+Web,up,192.168.88.11,3000000
+Web,up,fd00::10,1200000

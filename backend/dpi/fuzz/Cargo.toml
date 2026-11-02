@@ -1,0 +1,24 @@
+[package]
+name = "tmon-dpi-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+tmon-dpi = { path = "../tmon-dpi" }
+tmon-dpi-proto = { path = "../../crates/tmon-dpi-proto" }
+
+# Built only with `cargo +nightly fuzz` (ASan) against the local nDPI.
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "sidecar_packets"
+path = "fuzz_targets/sidecar_packets.rs"
+test = false
+doc = false
+bench = false

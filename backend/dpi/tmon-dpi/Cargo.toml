@@ -1,0 +1,36 @@
+[package]
+name = "tmon-dpi"
+description = "tmon application classifier sidecar (nDPI; protocol v1 on fd 3)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[features]
+default = ["ndpi"]
+# Without it only the pure-Rust core (result mapping, flow table, I/O loop)
+# builds, which is what CI runs when nDPI is not installed.
+ndpi = ["dep:ndpi-sys", "dep:landlock", "dep:seccompiler"]
+
+[dependencies]
+tmon-dpi-proto.workspace = true
+libc.workspace = true
+lru.workspace = true
+ndpi-sys = { workspace = true, optional = true }
+landlock = { workspace = true, optional = true }
+seccompiler = { workspace = true, optional = true }
+
+[dev-dependencies]
+tmon-capture.workspace = true
+
+[[bin]]
+name = "tmon-dpi"
+path = "src/main.rs"
+required-features = ["ndpi"]
+
+[lints]
+workspace = true
+
+[[bench]]
+name = "classify"
+harness = false

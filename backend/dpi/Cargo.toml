@@ -1,0 +1,36 @@
+# The nDPI classifier sidecar (feature 003). A separate workspace: it needs a
+# C toolchain and libndpi, which the main tmon workspace must never link.
+#
+#   just dpi-build    # builds nDPI 6.0 into target/ndpi, then this workspace
+#   just test-dpi     # tests (the pure-Rust part also runs without nDPI:
+#                     # cargo test -p tmon-dpi --no-default-features)
+
+[workspace]
+resolver = "2"
+members = ["ndpi-sys", "tmon-dpi"]
+exclude = ["fuzz"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+
+[workspace.dependencies]
+tmon-dpi-proto = { path = "../crates/tmon-dpi-proto" }
+# Test-only: protocol fixtures (BitTorrent, WireGuard, ...) from the main workspace.
+tmon-capture = { path = "../crates/tmon-capture", features = ["fixtures"] }
+ndpi-sys = { path = "ndpi-sys" }
+libc = "0.2"
+lru = "0.16"
+landlock = "0.4"
+seccompiler = "0.5"
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.clippy]
+undocumented_unsafe_blocks = "deny"
+
+[profile.release]
+panic = "abort"

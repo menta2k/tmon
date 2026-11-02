@@ -1,0 +1,13 @@
+[package]
+name = "tmon-dpi-proto"
+description = "tmon <-> application classifier IPC protocol v1 (contracts/dpi-ipc.md)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true

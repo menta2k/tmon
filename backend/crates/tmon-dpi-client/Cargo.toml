@@ -1,0 +1,34 @@
+[package]
+name = "tmon-dpi-client"
+description = "tmon side of application classification: supervisor, packet tap, app table"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+tmon-core.workspace = true
+tmon-capture.workspace = true
+tmon-dpi-proto.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+lru.workspace = true
+serde.workspace = true
+command-fds.workspace = true
+tokio-seqpacket.workspace = true
+nix.workspace = true
+rand.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
+serde_json.workspace = true
+tmon-capture = { workspace = true, features = ["fixtures"] }
+tokio.workspace = true
+
+[[example]]
+name = "fake_dpi"
+
+[[bench]]
+name = "tap_pipeline"
+harness = false

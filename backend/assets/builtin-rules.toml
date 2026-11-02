@@ -1,0 +1,552 @@
+# tmon built-in categories and rules.
+# Priorities MUST stay below 1_000_000 (the user-rule band).
+# Bands used here: 900k hostname, 860k named apps, 850k classifier categories, 800k ASN/CIDR, 700k specific ports, 100k web catch-all,
+# below that: broad fallbacks that must not win over the web catch-all.
+# Rule ids 1..9999 are reserved for built-in rules.
+
+[[categories]]
+id = 0
+name = "Other"
+color = "#9E9E9E"
+description = "Traffic not matched by any rule"
+
+[[categories]]
+id = 1
+name = "Web"
+color = "#42A5F5"
+description = "General HTTP/HTTPS browsing"
+
+[[categories]]
+id = 2
+name = "Streaming"
+color = "#EF5350"
+description = "Video and audio streaming"
+
+[[categories]]
+id = 3
+name = "Gaming"
+color = "#AB47BC"
+description = "Online games and game platforms"
+
+[[categories]]
+id = 4
+name = "Messaging/VoIP"
+color = "#26A69A"
+description = "Chat, voice and video calls"
+
+[[categories]]
+id = 5
+name = "Social"
+color = "#EC407A"
+description = "Social networks"
+
+[[categories]]
+id = 6
+name = "Cloud/Storage"
+color = "#5C6BC0"
+description = "Cloud providers, file sync and backup"
+
+[[categories]]
+id = 7
+name = "Software Updates"
+color = "#FFA726"
+description = "OS and application updates"
+
+[[categories]]
+id = 8
+name = "VPN/Tunnels"
+color = "#8D6E63"
+description = "VPN and tunnelling protocols"
+
+[[categories]]
+id = 9
+name = "DNS"
+color = "#78909C"
+description = "Name resolution"
+
+[[categories]]
+id = 10
+name = "Email"
+color = "#FFCA28"
+description = "Mail transfer and retrieval"
+
+[[categories]]
+id = 11
+name = "Network Services"
+color = "#66BB6A"
+description = "NTP, SNMP, DHCP, ICMP and similar infrastructure"
+
+[[categories]]
+id = 12
+name = "Advertising"
+color = "#D4E157"
+description = "Ad networks, ad exchanges and trackers"
+
+[[categories]]
+id = 13
+name = "AI Services"
+color = "#7E57C2"
+description = "AI assistants and model APIs"
+
+[[categories]]
+id = 14
+name = "Remote Access"
+color = "#FF7043"
+description = "Remote desktop and remote support tools"
+
+[[categories]]
+id = 15
+name = "File Sharing"
+color = "#795548"
+description = "Peer-to-peer and file transfer applications"
+
+# ---------------------------------------------------------------- hostnames
+[[rules]]
+id = 1
+name = "YouTube video"
+category = 2
+priority = 900_100
+match = { hostname = ["*.googlevideo.com", "*.youtube.com", "*.ytimg.com"] }
+
+[[rules]]
+id = 2
+name = "Netflix"
+category = 2
+priority = 900_100
+match = { hostname = ["*.nflxvideo.net", "*.netflix.com", "*.nflxso.net"] }
+
+[[rules]]
+id = 3
+name = "Twitch"
+category = 2
+priority = 900_100
+match = { hostname = ["*.ttvnw.net", "*.twitch.tv", "*.jtvnw.net"] }
+
+[[rules]]
+id = 4
+name = "Other streaming services"
+category = 2
+priority = 900_000
+match = { hostname = ["*.spotify.com", "*.scdn.co", "*.disneyplus.com", "*.dssott.com", "*.hbomax.com", "*.primevideo.com", "*.aiv-cdn.net", "*.aiv-delivery.net"] }
+
+[[rules]]
+id = 5
+name = "Windows Update"
+category = 7
+priority = 900_100
+match = { hostname = ["*.windowsupdate.com", "*.dl.delivery.mp.microsoft.com", "*.update.microsoft.com", "*.delivery.mp.microsoft.com"] }
+
+[[rules]]
+id = 6
+name = "Apple software updates"
+category = 7
+priority = 900_100
+match = { hostname = ["swcdn.apple.com", "*.swcdn.apple.com", "updates.cdn-apple.com", "*.updates.cdn-apple.com", "mesu.apple.com"] }
+
+[[rules]]
+id = 7
+name = "Linux / game client updates"
+category = 7
+priority = 900_000
+match = { hostname = ["*.ubuntu.com", "*.debian.org", "*.fedoraproject.org", "*.archlinux.org", "*.steamcontent.com", "*.epicgames-download1.akamaized.net"] }
+
+[[rules]]
+id = 8
+name = "WhatsApp / Signal / Telegram"
+category = 4
+priority = 900_100
+match = { hostname = ["*.whatsapp.net", "*.whatsapp.com", "*.signal.org", "*.telegram.org", "*.discord.gg", "*.discord.com", "*.discordapp.net"] }
+
+[[rules]]
+id = 9
+name = "Video calls"
+category = 4
+priority = 900_100
+match = { hostname = ["*.zoom.us", "*.teams.microsoft.com", "*.skype.com", "meet.google.com"] }
+
+[[rules]]
+id = 10
+name = "Social networks"
+category = 5
+priority = 900_000
+match = { hostname = ["*.facebook.com", "*.fbcdn.net", "*.instagram.com", "*.cdninstagram.com", "*.tiktok.com", "*.tiktokcdn.com", "*.twitter.com", "*.x.com", "*.twimg.com", "*.reddit.com", "*.redd.it", "*.linkedin.com", "*.snapchat.com"] }
+
+[[rules]]
+id = 11
+name = "Cloud storage and sync"
+category = 6
+priority = 900_000
+match = { hostname = ["*.dropbox.com", "*.dropboxusercontent.com", "*.icloud.com", "*.icloud-content.com", "*.onedrive.com", "*.sharepoint.com", "drive.google.com", "*.googleusercontent.com", "*.backblazeb2.com", "*.s3.amazonaws.com", "s3.amazonaws.com", "*.s3.*.amazonaws.com", "storage.googleapis.com", "*.blob.core.windows.net", "*.r2.cloudflarestorage.com"] }
+
+[[rules]]
+id = 12
+name = "Game platforms"
+category = 3
+priority = 900_000
+match = { hostname = ["*.steampowered.com", "*.steamserver.net", "*.xboxlive.com", "*.playstation.net", "*.riotgames.com", "*.battle.net", "*.epicgames.com"] }
+
+[[rules]]
+id = 13
+name = "Operator TV / video CDNs"
+category = 2
+priority = 900_100
+# ISP-embedded caches (e.g. United Group / Vivacom TV) sit inside the ISP's ASN.
+match = { hostname = ["*.cdn.united.cloud"] }
+
+[[rules]]
+id = 14
+name = "Advertising and tracking"
+category = 12
+priority = 900_000
+match = { hostname = ["*.doubleclick.net", "*.2mdn.net", "*.googlesyndication.com", "*.googleadservices.com", "*.googletagservices.com", "*.criteo.com", "*.criteo.net", "*.adform.net", "*.rubiconproject.com", "*.pubmatic.com", "*.adnxs.com", "*.taboola.com", "*.outbrain.com", "*.amazon-adsystem.com", "*.scorecardresearch.com", "*.adsrvr.org", "*.casalemedia.com", "*.openx.net", "*.smartadserver.com", "*.teads.tv", "*.moatads.com"] }
+
+[[rules]]
+id = 15
+name = "AI assistants and APIs"
+category = 13
+priority = 900_000
+match = { hostname = ["claude.ai", "*.claude.ai", "anthropic.com", "*.anthropic.com", "chatgpt.com", "*.chatgpt.com", "openai.com", "*.openai.com", "*.oaiusercontent.com", "gemini.google.com", "generativelanguage.googleapis.com", "*.perplexity.ai", "perplexity.ai", "copilot.microsoft.com", "*.mistral.ai", "*.x.ai", "grok.com", "*.deepseek.com"] }
+
+# ---------------------------------------------------------------- ASNs
+[[rules]]
+id = 100
+name = "Netflix (AS2906)"
+category = 2
+priority = 800_100
+match = { asn = [2906, 40027, 55095] }
+
+[[rules]]
+id = 101
+name = "Meta (AS32934)"
+category = 5
+priority = 800_000
+match = { asn = [32934, 63293] }
+
+[[rules]]
+id = 102
+name = "Valve / Steam (AS32590)"
+category = 3
+priority = 800_000
+match = { asn = [32590] }
+
+[[rules]]
+id = 103
+name = "Twitch (AS46489)"
+category = 2
+priority = 800_000
+match = { asn = [46489] }
+
+[[rules]]
+id = 105
+name = "Telegram (own network)"
+category = 4
+priority = 800_100
+match = { asn = [62041, 62014, 59930, 44907, 211157] }
+
+[[rules]]
+id = 106
+name = "Zoom (own network)"
+category = 4
+priority = 800_100
+match = { asn = [30103] }
+
+[[rules]]
+id = 107
+name = "Riot Games / Blizzard (own networks)"
+category = 3
+priority = 800_000
+match = { asn = [6507, 57976] }
+
+[[rules]]
+id = 104
+name = "Cloud providers (non-web ports)"
+category = 6
+# Below the web catch-all: a website hosted on AWS/GCP/Azure is still "Web".
+priority = 90_000
+match = { asn = [16509, 14618, 8075, 396982, 14061, 24940, 16276, 63949] }
+
+# ---------------------------------------------------------------- ports
+[[rules]]
+id = 200
+name = "DNS"
+category = 9
+priority = 700_200
+match = { remote_port = [53, 853, 5353] }
+
+[[rules]]
+id = 201
+name = "Email"
+category = 10
+priority = 700_100
+match = { proto = [6], remote_port = [25, 465, 587, 110, 143, 993, 995] }
+
+[[rules]]
+id = 202
+name = "VPN protocols"
+category = 8
+priority = 700_100
+match = { remote_port = [1194, 51820, 500, 4500, 1701, 1723] }
+
+[[rules]]
+id = 203
+name = "GRE / ESP / AH tunnels"
+category = 8
+priority = 700_100
+match = { proto = [47, 50, 51] }
+
+[[rules]]
+id = 204
+name = "VoIP / STUN / SIP"
+category = 4
+priority = 700_000
+match = { proto = [17], remote_port = ["3478-3481", 5060, 5061, "19302-19309"] }
+
+[[rules]]
+id = 205
+name = "Steam game traffic"
+category = 3
+priority = 700_050
+match = { proto = [17], remote_port = ["27000-27100"] }
+
+[[rules]]
+id = 206
+name = "Xbox / PlayStation"
+category = 3
+priority = 700_050
+match = { remote_port = [3074, "3658-3659", 9308] }
+
+[[rules]]
+id = 207
+name = "Network services"
+category = 11
+priority = 700_100
+match = { proto = [17], remote_port = [123, 161, 162, 67, 68, 514, 1900] }
+
+[[rules]]
+id = 208
+name = "ICMP"
+category = 11
+priority = 700_100
+match = { proto = [1, 58] }
+
+[[rules]]
+id = 209
+name = "Internal LAN traffic"
+category = 11
+priority = 600_000
+match = { direction = ["internal"], proto = [2] }
+
+[[rules]]
+id = 210
+name = "Remote desktop / remote support"
+category = 14
+priority = 700_100
+# RDP, VNC, TeamViewer, AnyDesk, RustDesk.
+match = { remote_port = [3389, "5900-5901", 5938, 7070, "21114-21119"] }
+
+[[rules]]
+id = 211
+name = "Push notifications (Apple / Google)"
+category = 11
+priority = 700_100
+match = { proto = [6], remote_port = [5223, "5228-5230", 2197] }
+
+[[rules]]
+id = 212
+name = "Windows Delivery Optimization"
+category = 7
+priority = 700_100
+match = { remote_port = [7680] }
+
+[[rules]]
+id = 213
+name = "RouterOS WireGuard default port"
+category = 8
+priority = 700_100
+match = { proto = [17], remote_port = [13231] }
+
+[[rules]]
+id = 214
+name = "MQTT (IoT)"
+category = 11
+priority = 700_100
+match = { proto = [6], remote_port = [1883, 8883] }
+
+# ---------------------------------------------------------------- applications (feature 003)
+# Named applications from the classifier: 860k band (below hostnames, above ASN/ports).
+[[rules]]
+id = 300
+name = "BitTorrent and other P2P"
+category = 15
+priority = 860_100
+match = { app = ["BitTorrent", "eDonkey", "Gnutella"] }
+
+[[rules]]
+id = 301
+name = "VPN protocols"
+category = 8
+priority = 860_100
+match = { app = ["WireGuard", "OpenVPN", "IPSec", "Tailscale", "PPTP"] }
+
+[[rules]]
+id = 302
+name = "Steam and Source games"
+category = 3
+priority = 860_100
+match = { app = ["Steam", "SteamDatagramRelay", "Source_Engine"] }
+
+[[rules]]
+id = 303
+name = "PC game platforms"
+category = 3
+priority = 860_100
+match = { app = ["RiotGames", "LoLWildRift", "Blizzard", "EpicGames"] }
+
+[[rules]]
+id = 304
+name = "Console networks"
+category = 3
+priority = 860_100
+match = { app = ["Xbox", "Playstation", "Nintendo"] }
+
+[[rules]]
+id = 305
+name = "Voice and video calls"
+category = 4
+priority = 860_100
+match = { app = ["Zoom", "TeamsCall", "WhatsAppCall", "SignalVoip", "TelegramVoip", "DiscordCall", "GoogleMeet", "Webex", "TeamSpeak", "Mumble"] }
+
+[[rules]]
+id = 306
+name = "Real-time media (STUN/RTP)"
+category = 4
+priority = 860_000
+match = { app = ["STUN", "RTP", "SRTP"] }
+
+[[rules]]
+id = 307
+name = "Messaging apps"
+category = 4
+priority = 860_000
+match = { app = ["WhatsApp", "Telegram", "Signal", "WeChat", "Discord", "Teams"] }
+
+[[rules]]
+id = 308
+name = "Remote desktop"
+category = 14
+priority = 860_100
+match = { app = ["RDP", "VNC", "AnyDesk", "TeamViewer"] }
+
+[[rules]]
+id = 309
+name = "Video and music streaming"
+category = 2
+priority = 860_100
+match = { app = ["NetFlix", "YouTube", "Twitch", "DisneyPlus", "Hulu", "AmazonVideo", "Spotify"] }
+
+[[rules]]
+id = 310
+name = "Messenger file transfer"
+category = 15
+priority = 860_000
+match = { app = ["WhatsAppFiles"] }
+
+# Classifier category fallbacks: 850k band.
+[[rules]]
+id = 320
+name = "Classifier: downloads"
+category = 15
+priority = 850_100
+match = { app_category = ["Download", "FileSharing"] }
+
+[[rules]]
+id = 321
+name = "Classifier: VPN"
+category = 8
+priority = 850_100
+match = { app_category = ["VPN"] }
+
+[[rules]]
+id = 322
+name = "Classifier: games"
+category = 3
+priority = 850_100
+match = { app_category = ["Game"] }
+
+[[rules]]
+id = 323
+name = "Classifier: VoIP and media"
+category = 4
+priority = 850_100
+match = { app_category = ["VoIP", "Media"] }
+
+[[rules]]
+id = 324
+name = "Classifier: chat"
+category = 4
+priority = 850_000
+match = { app_category = ["Chat", "Collaborative"] }
+
+[[rules]]
+id = 325
+name = "Classifier: remote access"
+category = 14
+priority = 850_100
+match = { app_category = ["RemoteAccess"] }
+
+[[rules]]
+id = 326
+name = "Classifier: streaming"
+category = 2
+priority = 850_100
+match = { app_category = ["Streaming", "Video", "Music"] }
+
+[[rules]]
+id = 327
+name = "Classifier: social networks"
+category = 5
+priority = 850_100
+match = { app_category = ["SocialNetwork"] }
+
+[[rules]]
+id = 328
+name = "Classifier: email"
+category = 10
+priority = 850_100
+match = { app_category = ["Email"] }
+
+[[rules]]
+id = 329
+name = "Classifier: software updates"
+category = 7
+priority = 850_100
+match = { app_category = ["SoftwareUpdate"] }
+
+[[rules]]
+id = 330
+name = "Classifier: cloud"
+category = 6
+priority = 850_000
+match = { app_category = ["Cloud", "DataTransfer"] }
+
+[[rules]]
+id = 331
+name = "Classifier: network services"
+category = 11
+priority = 850_000
+match = { app_category = ["Network", "ConnCheck"] }
+
+[[rules]]
+id = 332
+name = "Classifier: IoT"
+category = 11
+priority = 850_000
+match = { app_category = ["IoT-Scada"] }
+
+# ---------------------------------------------------------------- catch-all
+[[rules]]
+id = 900
+name = "HTTPS / HTTP / QUIC"
+category = 1
+priority = 100_000
+match = { remote_port = [80, 443, 8080, 8443] }

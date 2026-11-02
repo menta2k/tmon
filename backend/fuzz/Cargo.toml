@@ -1,0 +1,75 @@
+[package]
+name = "tmon-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+tmon-collector = { path = "../crates/tmon-collector" }
+tmon-capture = { path = "../crates/tmon-capture" }
+tmon-core = { path = "../crates/tmon-core" }
+tmon-dpi-proto = { path = "../crates/tmon-dpi-proto" }
+
+# Kept out of the main workspace: built only with `cargo +nightly fuzz`.
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "netflow"
+path = "fuzz_targets/netflow.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "sflow"
+path = "fuzz_targets/sflow.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "capture_datagram"
+path = "fuzz_targets/capture_datagram.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "tls_client_hello"
+path = "fuzz_targets/tls_client_hello.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "quic_initial"
+path = "fuzz_targets/quic_initial.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "dns_response"
+path = "fuzz_targets/dns_response.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "dpi_proto_to_sidecar"
+path = "fuzz_targets/dpi_proto_to_sidecar.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "dpi_proto_to_tmon"
+path = "fuzz_targets/dpi_proto_to_tmon.rs"
+test = false
+doc = false
+bench = false

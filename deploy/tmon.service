@@ -1,0 +1,48 @@
+[Unit]
+Description=tmon - MikroTik flow monitor
+Documentation=file:///usr/share/doc/tmon/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/tmon serve --config /etc/tmon/tmon.toml
+# Secrets: TMON_HTTP__PASSWORD_HASH=..., TMON_ROUTER__PASSWORD=... (mode 0600, root-owned)
+EnvironmentFile=-/etc/tmon/tmon.env
+Environment=TMON_DATA_DIR=/var/lib/tmon
+Restart=on-failure
+RestartSec=5
+
+DynamicUser=yes
+StateDirectory=tmon
+StateDirectoryMode=0750
+MemoryMax=1G
+LimitNOFILE=65536
+
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

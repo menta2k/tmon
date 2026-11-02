@@ -1,0 +1,13 @@
+{
+  "leases": [
+    {"address": "192.168.88.10", "mac-address": "AA:BB:CC:00:00:10", "host-name": "laptop", "status": "bound"},
+    {"address": "192.168.88.11", "mac-address": "AA:BB:CC:00:00:11", "host-name": "gaming-pc", "status": "bound"},
+    {"address": "192.168.88.12", "mac-address": "AA:BB:CC:00:00:12", "host-name": "work-mac", "status": "bound"}
+  ],
+  "dns": [
+    {"name": "cdn.example-video.com", "data": "203.0.113.10", "type": "A", "ttl": "5m"},
+    {"name": "api.example.org", "data": "203.0.113.21", "type": "A", "ttl": "1m"},
+    {"name": "v6.example-video.com", "data": "2001:db8::443", "type": "AAAA", "ttl": "5m"},
+    {"name": "alias.example.org", "data": "api.example.org", "type": "CNAME", "ttl": "1m"}
+  ]
+}

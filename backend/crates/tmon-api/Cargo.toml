@@ -1,0 +1,43 @@
+[package]
+name = "tmon-api"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+tmon-core.workspace = true
+tmon-collector.workspace = true
+tmon-enrich.workspace = true
+tmon-store.workspace = true
+tmon-capture.workspace = true
+tmon-dpi-client.workspace = true
+tmon-dpi-proto.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+futures.workspace = true
+async-stream.workspace = true
+axum.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+argon2.workspace = true
+rand.workspace = true
+rust-embed = { workspace = true, optional = true }
+mime_guess.workspace = true
+csv.workspace = true
+bytes.workspace = true
+time.workspace = true
+base64.workspace = true
+form_urlencoded = "1"
+arc-swap.workspace = true
+
+[features]
+embed-ui = ["dep:rust-embed"]
+
+[dev-dependencies]
+tempfile.workspace = true
+http-body-util.workspace = true

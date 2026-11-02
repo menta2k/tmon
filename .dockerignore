@@ -1,0 +1,12 @@
+**/node_modules
+**/target
+frontend/dist
+frontend/coverage
+frontend/test-results
+frontend/playwright-report
+.git
+.specify
+specs
+*.log
+.env*
+!deploy/.env.example

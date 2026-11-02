@@ -1,0 +1,40 @@
+# tmon with application classification (nDPI sidecar, feature 003).
+# Usage (from the repository root):
+#   docker build -f deploy/Dockerfile --target tmon-dpi -t tmon:dpi .    # or: just docker-dpi
+#   echo -n 'your-password' | docker run --rm -i tmon:dpi hash-password  # → deploy/.env as TMON_HTTP__PASSWORD_HASH='<hash>' (single quotes: the hash contains $)
+#   docker compose -f deploy/docker-compose.dpi.yml up -d
+#   docker compose -f deploy/docker-compose.dpi.yml run --rm tmon geoip-update --config /etc/tmon/tmon.toml
+# Router: flow export to :2055, packet capture (sniff-tzsp) to :38008 (host port; see ports) incl. the reply-direction rule
+# (docs/routeros.md). Run on a Linux host: WSL2 mirrored networking drops the large capture datagrams.
+services:
+  tmon:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      target: tmon-dpi
+    image: tmon:dpi
+    restart: unless-stopped
+    env_file: .env            # TMON_HTTP__PASSWORD_HASH='...' (quoted),, optional TMON_HTTP__API_TOKEN, TMON_ROUTER__PASSWORD
+    ports:
+      - "8080:8080/tcp"       # web UI + API
+      - "2055:2055/udp"       # NetFlow v5/v9
+      - "4739:4739/udp"       # IPFIX
+      - "6343:6343/udp"       # sFlow
+      # Packet capture (TZSP) → naming + classification. Host port 38008, not 37008:
+      # WSL2 mirrored networking reserves its Linux ephemeral range (33700–37795 by
+      # default, see /proc/sys/net/ipv4/ip_local_port_range) on Windows, so Docker
+      # Desktop cannot publish 37008 there. Point the router's sniff-target-port at 38008.
+      - "38008:37008/udp"
+    volumes:
+      - tmon-data:/var/lib/tmon
+      - ./tmon.dpi.toml:/etc/tmon/tmon.toml:ro
+    read_only: true
+    security_opt:
+      - no-new-privileges:true   # the default seccomp profile stays on; tmon-dpi adds its own on top
+    cap_drop: [ALL]
+    # tmon (~1 GB bound) + the classifier (memory_limit_mb + 64 MB address-space cap).
+    mem_limit: 1536m
+    cpus: 2
+
+volumes:
+  tmon-data:

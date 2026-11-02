@@ -1,0 +1,21 @@
+[package]
+name = "tmon-collector"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+tmon-core.workspace = true
+netflow_parser.workspace = true
+sflow-parser.workspace = true
+tokio.workspace = true
+socket2.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+arc-swap.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+tokio.workspace = true

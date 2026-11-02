@@ -1,0 +1,31 @@
+[package]
+name = "tmon-enrich"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+tmon-core.workspace = true
+tmon-store.workspace = true
+tmon-collector.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+arc-swap.workspace = true
+maxminddb.workspace = true
+lru.workspace = true
+reqwest.workspace = true
+toml.workspace = true
+time.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+wiremock.workspace = true
+criterion.workspace = true
+
+[[bench]]
+name = "pipeline"
+harness = false
